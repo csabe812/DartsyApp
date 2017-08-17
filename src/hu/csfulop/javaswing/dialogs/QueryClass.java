@@ -11,6 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import hu.csfulop.javaswing.config.DataClass;
+
 public class QueryClass {
  
     /**
@@ -21,10 +23,9 @@ public class QueryClass {
 	
     private static Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:d:\\Programming\\eclipse_projects\\Dartsy\\src\\resources\\dartsy_db.sqlite";
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(DataClass.jdbcUrl);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -48,11 +49,10 @@ public class QueryClass {
     }
     
     public static void selectAll(JComboBox<String> jcb){
-        String sql = "SELECT name FROM users";
         jcb.removeAllItems();
         try (Connection conn = connect();
              Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
+             ResultSet rs    = stmt.executeQuery(DataClass.selectName)){
             
             // loop through the result set
         	int counter = 0;
@@ -66,11 +66,9 @@ public class QueryClass {
     }
     
     public static void insert(String name) {
-    	if(!checkUserExists(name)) {
-    		String sql = "INSERT INTO users(name) VALUES(?)";
-    		 
+    	if(!checkUserExists(name)) {    		 
             try (Connection conn = connect();
-                    PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    PreparedStatement pstmt = conn.prepareStatement(DataClass.insertName)) {
                 pstmt.setString(1, name);
                 pstmt.executeUpdate();
             } catch (SQLException e) {
@@ -78,7 +76,7 @@ public class QueryClass {
             }
     	} else {
     		JFrame jf = new JFrame();
-    		JOptionPane.showMessageDialog(jf, "User already exists!", "Cannot add user", JOptionPane.WARNING_MESSAGE);
+    		JOptionPane.showMessageDialog(jf, DataClass.userExists, DataClass.cannotAdd, JOptionPane.WARNING_MESSAGE);
     	}
     }
  

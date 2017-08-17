@@ -1,5 +1,7 @@
 package hu.csfulop.javaswing;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +21,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	 */
 	public MainWindow(String title) {
 		super(title);
+		Image icon = Toolkit.getDefaultToolkit().getImage(DataClass.frameIconPath);  
+		this.setIconImage(icon);  
 		this.setSize(800, 600);
 		initMenuBar();
 		this.setLocationRelativeTo(null);
@@ -43,9 +47,9 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().toUpperCase().equals("NEW")) {
+		if(e.getActionCommand().equals(DataClass.fileMenuItem[0])) {
 			new NewGameDialog();
-		} else if(e.getActionCommand().toUpperCase().equals("EXIT")) {
+		} else if(e.getActionCommand().equals(DataClass.fileMenuItem[1])) {
 			System.exit(0);
 		}
 	}

@@ -57,6 +57,9 @@ public class NewGameDialog extends JDialog implements ActionListener {
 			this.setVisible(false);
 		} else if (e.getActionCommand().equals(DataClass.newPlayerButton)) {
 			new NewPlayerDialog(this);
+		} else if(e.getActionCommand().equals(DataClass.okButton)) {
+			System.out.println(DataClass.startedGame);
+			this.setVisible(false);
 		}
 	}
 

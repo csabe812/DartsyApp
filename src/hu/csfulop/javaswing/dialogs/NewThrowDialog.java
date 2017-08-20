@@ -5,24 +5,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
-import hu.csfulop.javaswing.MainWindow;
 import hu.csfulop.javaswing.config.DataClass;
 
-public class NewGameDialog extends JDialog implements ActionListener {
+public class NewThrowDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private GridLayout gridLayout;
-	private JComboBox<String> playerOne, playerTwo;
-	private MainWindow mw;
 	
-	public NewGameDialog(MainWindow mw) {
-		this.mw = mw;
+	public NewThrowDialog() {
 		this.setTitle(DataClass.newGameDialog);
-		this.gridLayout = new GridLayout(4, 2);
+		this.gridLayout = new GridLayout(3, 2);
 		this.setLayout(this.gridLayout);
 		initItems();
 		this.pack();
@@ -31,21 +27,14 @@ public class NewGameDialog extends JDialog implements ActionListener {
 	}
 
 	public void initItems() {
-		JLabel jl = new JLabel(DataClass.playerOne);
+		JLabel jl = new JLabel(DataClass.enterScore);
 		this.add(jl);
-		playerOne = new JComboBox<String>();
-		QueryClass.selectAll(playerOne);
-		this.add(playerOne);
-		jl = new JLabel(DataClass.playerTwo);
+		JTextField jtf = new JTextField();
+		this.add(jtf);
+		jl = new JLabel(DataClass.modifyPreviousScore);
 		this.add(jl);
-		playerTwo = new JComboBox<String>();
-		QueryClass.selectAll(playerTwo);
-		this.add(playerTwo);
-		jl = new JLabel(DataClass.newPlayer);
-		this.add(jl);
-		JButton jb = new JButton(DataClass.newPlayerButton);
+		JButton jb = new JButton(DataClass.modify);
 		this.add(jb);
-		jb.addActionListener(this);
 		jb = new JButton(DataClass.okButton);
 		this.add(jb);
 		jb.addActionListener(this);
@@ -59,23 +48,10 @@ public class NewGameDialog extends JDialog implements ActionListener {
 		if(e.getActionCommand().equals(DataClass.cancelButton)) {
 			this.setVisible(false);
 		} else if (e.getActionCommand().equals(DataClass.newPlayerButton)) {
-			new NewPlayerDialog(this);
 		} else if(e.getActionCommand().equals(DataClass.okButton)) {
+			System.out.println(DataClass.startedGame);
 			this.setVisible(false);
-			this.mw.changeTableVisibility();
-			QueryClass.insertNewMatch();
-			new NewThrowDialog();
 		}
 	}
-
-	public JComboBox<String> getPlayerOne() {
-		return playerOne;
-	}
-
-	public JComboBox<String> getPlayerTwo() {
-		return playerTwo;
-	}
-	
-	
 	
 }

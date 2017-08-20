@@ -23,9 +23,16 @@ public interface DataClass {
     String jdbcUrl = "jdbc:sqlite:d:\\Programming\\eclipse_projects\\Dartsy\\src\\resources\\dartsy_db.sqlite";
     String selectName = "SELECT name FROM users";
     String insertName = "INSERT INTO users(name) VALUES(?)";
+    String insertMatch = "INSERT INTO matches DEFAULT VALUES";
     //JOptionPane
     String userExists = "User already exists!";
     String cannotAdd = "Cannot add user";
     
     String startedGame = "The game has been started";
+    String youTurn = " you turn";
+    String enterScore = "Enter score";
+    String modifyPreviousScore = "Modifiy previous score";
+	String modify = "Modify";
+
+	String[] tableColumnName = { "ID", "NAME", "THREW" };
 }

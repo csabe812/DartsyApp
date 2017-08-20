@@ -1,6 +1,7 @@
 package hu.csfulop.javaswing.dialogs;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,5 +80,13 @@ public class QueryClass {
     		JOptionPane.showMessageDialog(jf, DataClass.userExists, DataClass.cannotAdd, JOptionPane.WARNING_MESSAGE);
     	}
     }
+    
+	public static void insertNewMatch() {
+		try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(DataClass.insertMatch)) {
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
  
 }

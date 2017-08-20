@@ -12,7 +12,6 @@ import java.util.Vector;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import hu.csfulop.javaswing.MainWindow;
@@ -112,16 +111,15 @@ public class QueryClass {
 		try {
 			Connection conn = connect();
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(DataClass.selectThrows);			
-			mw.setJt(new JTable(buildTableModel(rs)));
-			
+			ResultSet rs = stmt.executeQuery(DataClass.selectThrows);
+			DefaultTableModel dtm = buildTableModel(rs);
+			mw.getJt().setModel(dtm);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	public static DefaultTableModel buildTableModel(ResultSet rs)
-	        throws SQLException {
+	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
 
 	    ResultSetMetaData metaData = rs.getMetaData();
 

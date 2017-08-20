@@ -6,9 +6,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
 import hu.csfulop.javaswing.MainWindow;
 import hu.csfulop.javaswing.config.DataClass;
@@ -23,7 +24,7 @@ public class NewThrowDialog extends JDialog implements ActionListener {
 	public NewThrowDialog(MainWindow mw) {
 		this.mw = mw;
 		this.setTitle(DataClass.newGameDialog);
-		this.gridLayout = new GridLayout(3, 2);
+		this.gridLayout = new GridLayout(5, 2);
 		this.setLayout(this.gridLayout);
 		initItems();
 		this.pack();
@@ -32,7 +33,15 @@ public class NewThrowDialog extends JDialog implements ActionListener {
 	}
 
 	public void initItems() {
-		JLabel jl = new JLabel(DataClass.enterScore);
+		JLabel jl = new JLabel(DataClass.followingUserTurn);
+		this.add(jl);
+		jl = new JLabel(DataClass.followingUserTurn);
+		this.add(jl);
+		jl = new JLabel(DataClass.scoresLeft);
+		this.add(jl);
+		jl = new JLabel(DataClass.scoresLeft);
+		this.add(jl);
+		jl = new JLabel(DataClass.enterScore);
 		this.add(jl);
 		this.jtf = new JTextField();
 		this.add(this.jtf);
@@ -53,8 +62,14 @@ public class NewThrowDialog extends JDialog implements ActionListener {
 		if(e.getActionCommand().equals(DataClass.cancelButton)) {
 			this.setVisible(false);
 		} else if(e.getActionCommand().equals(DataClass.okButton)) {
-			QueryClass.insertNewThrow(Integer.parseInt(this.jtf.getText()));
-			QueryClass.selectThrows(this.mw);
+			int thrownValue = Integer.parseInt(this.jtf.getText());
+			if(thrownValue < 0 || thrownValue > 180) {
+				JFrame jf = new JFrame();
+				JOptionPane.showMessageDialog(jf, DataClass.valueError, DataClass.valueErrorTitle, JOptionPane.WARNING_MESSAGE);
+			} else {
+				QueryClass.insertNewThrow(Integer.parseInt(this.jtf.getText()));
+				QueryClass.selectThrows(this.mw);
+			}
 		}
 	}
 	

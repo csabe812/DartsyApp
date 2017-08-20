@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import hu.csfulop.javaswing.config.*;
 import hu.csfulop.javaswing.dialogs.NewGameDialog;
@@ -50,6 +49,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	public void initTable() {
+		this.jt = new JTable();
 		QueryClass.selectThrows(this);
 		JScrollPane sp = new JScrollPane(this.jt);
 		this.add(sp);
@@ -70,10 +70,6 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	public void setJt(JTable jt) {
 		this.jt = jt;
-		DefaultTableModel dtm = (DefaultTableModel) this.jt.getModel();
-		dtm.fireTableDataChanged();
-		this.jt.setModel(dtm);
-		this.jt.repaint();
 	}
 
 	@Override

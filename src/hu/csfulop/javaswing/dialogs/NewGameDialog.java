@@ -35,11 +35,13 @@ public class NewGameDialog extends JDialog implements ActionListener {
 		this.add(jl);
 		playerOne = new JComboBox<String>();
 		QueryClass.selectAll(playerOne);
+		playerOne.setSelectedIndex(0);
 		this.add(playerOne);
 		jl = new JLabel(DataClass.playerTwo);
 		this.add(jl);
 		playerTwo = new JComboBox<String>();
 		QueryClass.selectAll(playerTwo);
+		playerTwo.setSelectedIndex(1);
 		this.add(playerTwo);
 		jl = new JLabel(DataClass.newPlayer);
 		this.add(jl);

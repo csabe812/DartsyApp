@@ -20,16 +20,19 @@ public interface DataClass {
 	String frameIconPath = "src\\resources\\darts2.jpg";
 	
 	//Database
-    String jdbcUrl = "jdbc:sqlite:d:\\Programming\\eclipse_projects\\Dartsy\\src\\resources\\dartsy_db.sqlite";
+    String jdbcUrl = "jdbc:sqlite:src\\resources\\dartsy_db.sqlite";
     String selectName = "SELECT name FROM users";
     String insertName = "INSERT INTO users(name) VALUES(?)";
     String insertMatch = "INSERT INTO matches DEFAULT VALUES";
-    String insertThrow = "INSERT INTO throws(matchid, userid, score) VALUES (1, 1, ?)";
-    String selectThrows = "SELECT throws.id, users.name, throws.score FROM throws, users WHERE users.id = throws.userid";
+    String insertThrow = "INSERT INTO throws(matchid, userid, score) VALUES (39, 1, ?)";
+    String selectThrows = "SELECT users.name, throws.score FROM throws, users WHERE users.id = throws.userid and throws.matchid = (SELECT id FROM matches ORDER BY ID DESC LIMIT 1)";
     
     //JOptionPane
     String userExists = "User already exists!";
     String cannotAdd = "Cannot add user";
+    
+    String valueError = "Value cannot be less than zero or more than 180";
+    String valueErrorTitle = "Value error";
     
     String startedGame = "The game has been started";
     String youTurn = " you turn";
@@ -38,4 +41,7 @@ public interface DataClass {
 	String modify = "Modify";
 
 	String[] tableColumnName = { "ID", "NAME", "THREW" };
+
+	String followingUserTurn = "Following turns";
+	String scoresLeft = "Scores left";
 }

@@ -64,7 +64,7 @@ public class NewGameDialog extends JDialog implements ActionListener {
 			this.setVisible(false);
 			this.mw.changeTableVisibility();
 			QueryClass.insertNewMatch();
-			new NewThrowDialog();
+			new NewThrowDialog(this.mw);
 		}
 	}
 

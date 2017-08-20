@@ -6,9 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import hu.csfulop.javaswing.config.*;
 import hu.csfulop.javaswing.dialogs.NewGameDialog;
+import hu.csfulop.javaswing.dialogs.QueryClass;
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -48,19 +50,32 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	public void initTable() {
-		String data[][] = { { "101", "Amit", "670000" }, { "102", "Jai", "780000" }, { "101", "Sachin", "700000" } };
-		String column[] = DataClass.tableColumnName;
-		this.jt = new JTable(data, column);
-//		jt.setBounds(30, 40, 200, 300);
+		QueryClass.selectThrows(this);
 		JScrollPane sp = new JScrollPane(this.jt);
 		this.add(sp);
-		this.jt.setVisible(false);
+//		this.jt.setVisible(false);
+	}
+	
+	public void updateTable() {
+		this.jt.repaint();
 	}
 	
 	public void changeTableVisibility() {
 		this.jt.setVisible(true);
 	}
 	
+	public JTable getJt() {
+		return jt;
+	}
+
+	public void setJt(JTable jt) {
+		this.jt = jt;
+		DefaultTableModel dtm = (DefaultTableModel) this.jt.getModel();
+		dtm.fireTableDataChanged();
+		this.jt.setModel(dtm);
+		this.jt.repaint();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals(DataClass.fileMenuItem[0])) {

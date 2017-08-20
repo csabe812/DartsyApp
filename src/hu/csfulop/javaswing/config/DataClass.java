@@ -24,6 +24,9 @@ public interface DataClass {
     String selectName = "SELECT name FROM users";
     String insertName = "INSERT INTO users(name) VALUES(?)";
     String insertMatch = "INSERT INTO matches DEFAULT VALUES";
+    String insertThrow = "INSERT INTO throws(matchid, userid, score) VALUES (1, 1, ?)";
+    String selectThrows = "SELECT throws.id, users.name, throws.score FROM throws, users WHERE users.id = throws.userid";
+    
     //JOptionPane
     String userExists = "User already exists!";
     String cannotAdd = "Cannot add user";

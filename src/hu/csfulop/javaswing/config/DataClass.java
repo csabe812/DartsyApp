@@ -23,9 +23,9 @@ public interface DataClass {
     String jdbcUrl = "jdbc:sqlite:src\\resources\\dartsy_db.sqlite";
     String selectName = "SELECT name FROM users";
     String insertName = "INSERT INTO users(name) VALUES(?)";
-    String insertMatch = "INSERT INTO matches DEFAULT VALUES";
-    String insertThrow = "INSERT INTO throws(matchid, userid, score) VALUES (39, 1, ?)";
     String selectThrows = "SELECT users.name, throws.score FROM throws, users WHERE users.id = throws.userid and throws.matchid = (SELECT id FROM matches ORDER BY ID DESC LIMIT 1)";
+    String selectPlayerOne = "select users.name, matches.playerone, matches.playertwo from users, matches where matches.playerone = users.id";
+    String selectPlayerTwo = "select users.name, matches.playerone, matches.playertwo from users, matches where matches.playertwo = users.id";
     
     //JOptionPane
     String userExists = "User already exists!";

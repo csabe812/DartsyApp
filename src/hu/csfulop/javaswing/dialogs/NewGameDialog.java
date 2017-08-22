@@ -18,7 +18,7 @@ public class NewGameDialog extends JDialog implements ActionListener {
 	private GridLayout gridLayout;
 	private JComboBox<String> playerOne, playerTwo;
 	private MainWindow mw;
-	
+
 	public NewGameDialog(MainWindow mw) {
 		this.mw = mw;
 		this.setTitle(DataClass.newGameDialog);
@@ -58,15 +58,15 @@ public class NewGameDialog extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals(DataClass.cancelButton)) {
+		if (e.getActionCommand().equals(DataClass.cancelButton)) {
 			this.setVisible(false);
 		} else if (e.getActionCommand().equals(DataClass.newPlayerButton)) {
 			new NewPlayerDialog(this);
-		} else if(e.getActionCommand().equals(DataClass.okButton)) {
+		} else if (e.getActionCommand().equals(DataClass.okButton)) {
 			this.setVisible(false);
 			this.mw.changeTableVisibility();
-			QueryClass.insertNewMatch();
-			new NewThrowDialog(this.mw);
+			QueryClass.insertNewMatch(this.playerOne.getSelectedIndex()+1, this.playerTwo.getSelectedIndex()+1);
+			new NewThrowDialog(this.mw, this.playerOne, this.playerTwo);
 		}
 	}
 
@@ -77,7 +77,5 @@ public class NewGameDialog extends JDialog implements ActionListener {
 	public JComboBox<String> getPlayerTwo() {
 		return playerTwo;
 	}
-	
-	
-	
+
 }

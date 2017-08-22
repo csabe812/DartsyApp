@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,8 +21,12 @@ public class NewThrowDialog extends JDialog implements ActionListener {
 	private GridLayout gridLayout;
 	private JTextField jtf;
 	private MainWindow mw;
-	
-	public NewThrowDialog(MainWindow mw) {
+	private JComboBox<String> one, two;
+	private boolean switcher = false;
+
+	public NewThrowDialog(MainWindow mw, JComboBox<String> one, JComboBox<String> two) {
+		this.one = one;
+		this.two = two;
 		this.mw = mw;
 		this.setTitle(DataClass.newGameDialog);
 		this.gridLayout = new GridLayout(5, 2);
@@ -35,11 +40,11 @@ public class NewThrowDialog extends JDialog implements ActionListener {
 	public void initItems() {
 		JLabel jl = new JLabel(DataClass.followingUserTurn);
 		this.add(jl);
-		jl = new JLabel(DataClass.followingUserTurn);
+		jl = new JLabel(this.one.getSelectedItem().toString());
 		this.add(jl);
 		jl = new JLabel(DataClass.scoresLeft);
 		this.add(jl);
-		jl = new JLabel(DataClass.scoresLeft);
+		jl = new JLabel(QueryClass.selectRemainingScore(this.one.getSelectedIndex()+1));
 		this.add(jl);
 		jl = new JLabel(DataClass.enterScore);
 		this.add(jl);
@@ -59,18 +64,25 @@ public class NewThrowDialog extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals(DataClass.cancelButton)) {
+		if (e.getActionCommand().equals(DataClass.cancelButton)) {
 			this.setVisible(false);
-		} else if(e.getActionCommand().equals(DataClass.okButton)) {
+		} else if (e.getActionCommand().equals(DataClass.okButton)) {
 			int thrownValue = Integer.parseInt(this.jtf.getText());
-			if(thrownValue < 0 || thrownValue > 180) {
+			if (thrownValue < 0 || thrownValue > 180) {
 				JFrame jf = new JFrame();
-				JOptionPane.showMessageDialog(jf, DataClass.valueError, DataClass.valueErrorTitle, JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(jf, DataClass.valueError, DataClass.valueErrorTitle,
+						JOptionPane.WARNING_MESSAGE);
 			} else {
-				QueryClass.insertNewThrow(Integer.parseInt(this.jtf.getText()));
+				QueryClass.insertNewThrow(this.one.getSelectedIndex()+1, Integer.parseInt(this.jtf.getText()));
 				QueryClass.selectThrows(this.mw);
+				this.setVisible(false);
+				if (switcher) {
+					new NewThrowDialog(this.mw, this.one, this.two);
+				} else {
+					new NewThrowDialog(this.mw, this.two, this.one);
+				}
 			}
 		}
 	}
-	
+
 }

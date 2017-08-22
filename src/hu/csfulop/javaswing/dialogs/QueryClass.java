@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -70,6 +71,23 @@ public class QueryClass {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public static String selectRemainingScore(int userId) {
+		String selectScore = "select 501-sum(score) as score from throws, users where throws.userid = users.id and throws.matchid = (SELECT matches.id  FROM matches ORDER BY Id DESC LIMIT 1) and throws.userid = " + userId + " group by userid";
+		try {
+			Connection conn = connect();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(selectScore);
+
+			// loop through the result set
+			while (rs.next()) {
+				return String.valueOf(rs.getInt("score"));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return "";
+	}
 
 	public static void insert(String name) {
 		if (!checkUserExists(name)) {
@@ -87,26 +105,30 @@ public class QueryClass {
 		}
 	}
 
-	public static void insertNewMatch() {
+	public static void insertNewMatch(int playerOneId, int playerTwoId) {
+		String insertMatch = "INSERT INTO matches(playerone, playertwo) VALUES (" + playerOneId + ", " + playerTwoId
+				+ ")";
 		try {
-			Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(DataClass.insertMatch);
+			Connection conn = connect();
+			PreparedStatement pstmt = conn.prepareStatement(insertMatch);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	public static void insertNewThrow(int score) {
+	public static void insertNewThrow(int userid, int score) {
+		String insertThrow = "INSERT INTO throws (matchid, userid, score) select (SELECT matches.id  FROM matches ORDER BY Id DESC LIMIT 1), " + userid + ", " + score;
+		System.out.println(insertThrow);
 		try {
 			Connection conn = connect();
-			PreparedStatement pstmt = conn.prepareStatement(DataClass.insertThrow);
-			pstmt.setInt(1, score);
+			PreparedStatement pstmt = conn.prepareStatement(insertThrow);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static void selectThrows(MainWindow mw) {
 		try {
 			Connection conn = connect();
@@ -118,29 +140,29 @@ public class QueryClass {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static DefaultTableModel buildTableModel(ResultSet rs) throws SQLException {
 
-	    ResultSetMetaData metaData = rs.getMetaData();
+		ResultSetMetaData metaData = rs.getMetaData();
 
-	    // names of columns
-	    Vector<String> columnNames = new Vector<String>();
-	    int columnCount = metaData.getColumnCount();
-	    for (int column = 1; column <= columnCount; column++) {
-	        columnNames.add(metaData.getColumnName(column));
-	    }
+		// names of columns
+		Vector<String> columnNames = new Vector<String>();
+		int columnCount = metaData.getColumnCount();
+		for (int column = 1; column <= columnCount; column++) {
+			columnNames.add(metaData.getColumnName(column));
+		}
 
-	    // data of the table
-	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-	    while (rs.next()) {	    	
-	        Vector<Object> vector = new Vector<Object>();
-	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-	            vector.add(rs.getObject(columnIndex));
-	        }
-	        data.add(vector);
-	    }
+		// data of the table
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		while (rs.next()) {
+			Vector<Object> vector = new Vector<Object>();
+			for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+				vector.add(rs.getObject(columnIndex));
+			}
+			data.add(vector);
+		}
 
-	    return new DefaultTableModel(data, columnNames);
+		return new DefaultTableModel(data, columnNames);
 
 	}
 }

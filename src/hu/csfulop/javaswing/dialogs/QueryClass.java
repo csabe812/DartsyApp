@@ -39,8 +39,9 @@ public class QueryClass {
 
 	public static boolean checkUserExists(String name) {
 		String sql = "SELECT name FROM users where name = '" + name + "'";
+		Connection conn = null;
 		try {
-			Connection conn = connect();
+			conn = connect();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -50,14 +51,22 @@ public class QueryClass {
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
 
 	public static void selectAll(JComboBox<String> jcb) {
+		Connection conn = null;
 		jcb.removeAllItems();
 		try {
-			Connection conn = connect();
+			conn = connect();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(DataClass.selectName);
 
@@ -69,13 +78,21 @@ public class QueryClass {
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public static String selectRemainingScore(int userId) {
+		Connection conn = null;
 		String selectScore = "select 501-sum(score) as score from throws, users where throws.userid = users.id and throws.matchid = (SELECT matches.id  FROM matches ORDER BY Id DESC LIMIT 1) and throws.userid = " + userId + " group by userid";
 		try {
-			Connection conn = connect();
+			conn = connect();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(selectScore);
 
@@ -85,19 +102,34 @@ public class QueryClass {
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return "";
 	}
 
 	public static void insert(String name) {
+		Connection conn = null;
 		if (!checkUserExists(name)) {
 			try {
-				Connection conn = connect();
+				conn = connect();
 				PreparedStatement pstmt = conn.prepareStatement(DataClass.insertName);
 				pstmt.setString(1, name);
 				pstmt.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} else {
 			JFrame jf = new JFrame();
@@ -106,38 +138,62 @@ public class QueryClass {
 	}
 
 	public static void insertNewMatch(int playerOneId, int playerTwoId) {
+		Connection conn = null;
 		String insertMatch = "INSERT INTO matches(playerone, playertwo) VALUES (" + playerOneId + ", " + playerTwoId
 				+ ")";
 		try {
-			Connection conn = connect();
+			conn = connect();
 			PreparedStatement pstmt = conn.prepareStatement(insertMatch);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public static void insertNewThrow(int userid, int score) {
+		Connection conn = null;
 		String insertThrow = "INSERT INTO throws (matchid, userid, score) select (SELECT matches.id  FROM matches ORDER BY Id DESC LIMIT 1), " + userid + ", " + score;
 		System.out.println(insertThrow);
 		try {
-			Connection conn = connect();
+			conn = connect();
 			PreparedStatement pstmt = conn.prepareStatement(insertThrow);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public static void selectThrows(MainWindow mw) {
+		Connection conn = null;
 		try {
-			Connection conn = connect();
+			conn = connect();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(DataClass.selectThrows);
 			DefaultTableModel dtm = buildTableModel(rs);
 			mw.getJt().setModel(dtm);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

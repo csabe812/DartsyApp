@@ -11,7 +11,6 @@ import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -220,5 +219,32 @@ public class QueryClass {
 
 		return new DefaultTableModel(data, columnNames);
 
+	}
+	
+	public static boolean hasPlayerWon(int id) {
+		Connection conn = null;
+		String sql = "select sum(score) from throws where matchid = (SELECT matches.id  FROM matches ORDER BY Id DESC LIMIT 1) group by userid";
+		try {
+			conn = connect();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			// loop through the result set
+			while (rs.next()) {
+				if(rs.getInt("sum(score)") == 501) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 }

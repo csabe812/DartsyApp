@@ -76,10 +76,14 @@ public class NewThrowDialog extends JDialog implements ActionListener {
 				QueryClass.insertNewThrow(this.one.getSelectedIndex()+1, Integer.parseInt(this.jtf.getText()));
 				QueryClass.selectThrows(this.mw);
 				this.setVisible(false);
-				if (switcher) {
-					new NewThrowDialog(this.mw, this.one, this.two);
+				if(QueryClass.hasPlayerWon(this.one.getSelectedIndex()+1)) {
+					JOptionPane.showMessageDialog(this.mw, "Congrats " + this.one.getSelectedItem().toString() + " you won!");
 				} else {
-					new NewThrowDialog(this.mw, this.two, this.one);
+					if (switcher) {
+						new NewThrowDialog(this.mw, this.one, this.two);
+					} else {
+						new NewThrowDialog(this.mw, this.two, this.one);
+					}
 				}
 			}
 		}
